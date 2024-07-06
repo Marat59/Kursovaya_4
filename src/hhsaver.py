@@ -1,6 +1,7 @@
 import json
 from src.jsonsaver import JSONSaver
 from src.vacancy import Vacancy
+from pathlib import Path
 
 class HHsaver(JSONSaver):
     """
@@ -12,13 +13,13 @@ class HHsaver(JSONSaver):
         """
         self.__list_of_vacs = [] # мы хотим на выходе получить список словарей(переделанных вакансий, т.к. словарь = json файл
 
-
     @property
     def get_list(self):
         """
         Получение доступа к листу с вакансиями (с приватным атрибутом)
         """
         return self.__list_of_vacs
+
     @get_list.setter
     def get_list(self, change: Vacancy):
         """
@@ -44,7 +45,7 @@ class HHsaver(JSONSaver):
                 self.get_list = vac # Добавл каждый элемент листа
         if type(give_me_list) == Vacancy: # тут на вход экземляр Vacancy
             self.get_list = give_me_list # сразу его и добавляем
-        with open("C:/Users/MARAT/PycharmProjects/pythonProject3/data/vacancies.json", 'w', encoding='utf-8') as file:
+        with open(Path(__file__).parent.parent.joinpath('data').joinpath('vacancies.json'), 'w', encoding='utf-8') as file:
             json.dump(self.get_list, file, ensure_ascii=False, indent = 12)
 
 
@@ -52,12 +53,12 @@ class HHsaver(JSONSaver):
         """
         Удаление вакансии из файла JSON
         """
-        with open("vacancies.json", 'r', encoding='utf-8') as file1:
+        with open(Path(__file__).parent.parent.joinpath('data').joinpath('vacancies.json'), 'r', encoding='utf-8') as file1:
             pythonvacs = json.load(file1)
             for py in pythonvacs:
                 if vac_name == py.get('name'):
                     del pythonvacs[pythonvacs.index(py)]
-        with open("C:/Users/MARAT/PycharmProjects/pythonProject3/data/vacancies.json", 'w', encoding='utf-8') as file2:
+        with open(Path(__file__).parent.parent.joinpath('data').joinpath('vacancies.json'), 'w', encoding='utf-8') as file2:
             json.dump(pythonvacs, file2, ensure_ascii=False, indent = 12)
 
 
@@ -65,7 +66,7 @@ class HHsaver(JSONSaver):
         """
         Загрузка вакансий из файла JSON
         """
-        with open("C:/Users/MARAT/PycharmProjects/pythonProject3/data/vacancies.json", 'r', encoding='utf-8') as file1:
+        with open(Path(__file__).parent.parent.joinpath('data').joinpath('vacancies.json'), 'r', encoding='utf-8') as file1:
             pythonvacs = json.load(file1)
             ourList = []
             for py in pythonvacs:

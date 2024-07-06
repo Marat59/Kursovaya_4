@@ -4,12 +4,6 @@ class Parser(ABC):
     """
     Абстрактный класс для работы с API сервиса с вакансиями
     """
-    @abstractmethod
-    def __init__(self, file_worker):
-        """
-        Инициализация парсера
-        """
-        pass
 
     @abstractmethod
     def load_vacancies(self, keyword):
@@ -19,7 +13,7 @@ class Parser(ABC):
         pass
 
     @abstractmethod
-    def get_top_vacancies_by_salary(self, n):
+    def get_top_vacancies_by_salary(self, count, listt):
         """
         Получение топ N вакансий по зарплате
         """

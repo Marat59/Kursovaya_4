@@ -13,40 +13,57 @@ class HH(Parser):
         """
         Инициализация парсера
         """
-        self.url = 'https://api.hh.ru/vacancies'
-        self.headers = {'User-Agent': 'HH-User-Agent'}
-        self.params = {'text': 'gyhuil', 'page': 0, 'per_page': 100}
-        self.vacancies = []
+        self.__url = 'https://api.hh.ru/vacancies'
+        self.__headers = {'User-Agent': 'HH-User-Agent'}
+        self.__params = {'text': 'gyhuil', 'page': 0, 'per_page': 100}
+        self.__vacancies = []
         self.file_worker = file_worker
-        super().__init__(file_worker)
+
+    def get_url(self):
+        """
+        Получение URL
+        """
+        return self.__url
+    def get_headers(self):
+        """
+        Получение заголовков
+        """
+        return self.__headers
+    def get_params(self):
+        """
+        Получение параметров
+        """
+        return self.__params
 
     def get_vacs(self):
         """
         Получение листа с вакансиями
         """
-        return self.vacancies
+        return self.__vacancies
+    def set_vacs(self, vvedi):
+        self.__vacancies = vvedi
 
 
     def load_vacancies(self, keyword):
         """
         Загрузка вакансий по ключевому слову
         """
-        self.params['text'] = keyword
-        while self.params.get('page') != 20:
-            response = requests.get(self.url, params=self.params, headers=self.headers, )
+        self.__params['text'] = keyword
+        while self.get_params().get('page') != 20:
+            response = requests.get(url=self.get_url(), params=self.get_params(), headers=self.get_headers())
             jsonResponse = response.json() # json файл из ответа = словарь
             listOfDictVacs = jsonResponse.get('items') #получаем значение из словаря по ключу items
             for i in listOfDictVacs:
                 if i != None:
                     if i.get('salary') != None:
-                        self.vacancies.append(Vacancy(
+                        self.__vacancies.append(Vacancy(
                             name=i.get('name'),
                             link=i.get('area').get('url'),
                             cur=i.get('salary', {}).get('currency') or 0,
                             salary=i.get('salary', {}).get('from') or 0,
                             description=i.get('snippet', {}).get('requirement')
                         ))
-            self.params['page'] += 1
+            self.__params['page'] += 1
 
 
     def get_top_vacancies_by_salary(self, count, listt):
@@ -68,5 +85,5 @@ class HH(Parser):
         """
         Получение вакансий с ключевым словом в описании
         """
-        return [vacancy for vacancy in self.vacancies if keyword.lower() in vacancy.get_description().lower()]
+        return [vacancy for vacancy in self.get_vacs() if keyword.lower() in vacancy.get_description().lower()]
 

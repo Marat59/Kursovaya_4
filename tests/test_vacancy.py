@@ -50,7 +50,7 @@ def test_gt_vas(vac, vac2):
 
 def test_validate_salary(vac):
     vac.salary = None
-    vac.validate_salary()
+    vac.validate()
     assert vac.salary == 0
 
 
