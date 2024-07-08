@@ -1,26 +1,4 @@
-import pytest
-from src.vacancy import Vacancy
-from src.hhsaver import HHsaver
-
-@pytest.fixture()
-def vac():
-    vac1 = Vacancy("Менеджер голосовой поддержки в Яндекс",
-                   "https://api.hh.ru/areas/113",30000,
-                   "Способен работать в команде.",
-                   "RUR")
-    return vac1
-
-@pytest.fixture()
-def vac2():
-    vac2 = Vacancy("Менеджер по Wildberries / менеджер работе с marketplace",
-                   "https://api.hh.ru/areas/1",100000,
-                   "Опыт работы с marketplace (или желание развиваться в этой сфере).")
-    return vac2
-
-@pytest.fixture()
-def vacHH():
-    newHH = HHsaver()
-    return newHH
+from conftest import vac, vac2
 
 
 def test_init_vac(vac):
@@ -37,8 +15,7 @@ def test_repr_vas(vac):
 
 
 def test_str_vas(vac):
-    assert vac.__str__() == 'Менеджер голосовой поддержки в Яндекс, 30000 RUR'
-
+    assert vac.__str__() == 'Менеджер голосовой поддержки в Яндекс, 30000 RUR, Описание вакансии: Способен работать в команде.\n'
 
 def test_lt_vas(vac, vac2):
     assert True == vac.__lt__(vac2)

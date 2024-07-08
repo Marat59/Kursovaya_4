@@ -1,9 +1,11 @@
 from src.hhsaver import HHsaver
 from src.hh import HH
 
+
 def save(answer_list_of_vacs):
     exm = HHsaver()
     exm.vacancy_add(answer_list_of_vacs)
+
 
 def search():
     flag = True
@@ -36,19 +38,18 @@ def search_by_criteria():
     flag = True
     while flag == True:
         req = input('Введите ключевое слово для поиска в описании: ').title().strip()  # заглавная и строчные + убрать пробелы по бокам
-        a = HH('file_worker')  # создали экз HН, чтобы было с чем работать
+        exemp_class = HH('file_worker')  # создали экз HН, чтобы было с чем работать
         try:
             print('Информация загружается...\n')
-            a.load_vacancies(req)  # по ключевому слову получаем список ваквак
-            b = a
-            answer_list_of_vacs = a.get_vacs()
+            exemp_class.load_vacancies(req)  # по ключевому слову получаем список ваквак
+            answer_list_of_vacs = exemp_class.get_vacs()
             save(answer_list_of_vacs)
             flg = True
             for vac in answer_list_of_vacs:
-                a = vac.get_description()
-                if a == None:
-                    a = ''
-                if req in a:
+                descip = vac.get_description()
+                if descip == None:
+                    descip = ''
+                if req in descip:
                     print(vac)
                     flg = False
                     flag = False
@@ -59,10 +60,9 @@ def search_by_criteria():
                 count = int(input('Введите кол-во: '))
                 print()
                 if count != 0:
-                    result = b.get_top_vacancies_by_salary(count, answer_list_of_vacs)
+                    result = exemp_class.get_top_vacancies_by_salary(count, answer_list_of_vacs)
                     for i in result:
                         print(i)
-
         except:
             print('Некорректный запрос!\n')
 

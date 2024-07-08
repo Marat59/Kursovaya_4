@@ -1,5 +1,4 @@
 import requests
-import json
 from src.parser import Parser
 from src.vacancy import Vacancy
 
@@ -8,7 +7,6 @@ class HH(Parser):
     """
     Класс для работы с API HeadHunter
     """
-
     def __init__(self, file_worker):
         """
         Инициализация парсера
@@ -24,11 +22,13 @@ class HH(Parser):
         Получение URL
         """
         return self.__url
+
     def get_headers(self):
         """
         Получение заголовков
         """
         return self.__headers
+
     def get_params(self):
         """
         Получение параметров
@@ -40,9 +40,9 @@ class HH(Parser):
         Получение листа с вакансиями
         """
         return self.__vacancies
-    def set_vacs(self, vvedi):
-        self.__vacancies = vvedi
 
+    def set_vacs(self, input_vac):
+        self.__vacancies = input_vac
 
     def load_vacancies(self, keyword):
         """
@@ -51,20 +51,19 @@ class HH(Parser):
         self.__params['text'] = keyword
         while self.get_params().get('page') != 20:
             response = requests.get(url=self.get_url(), params=self.get_params(), headers=self.get_headers())
-            jsonResponse = response.json() # json файл из ответа = словарь
-            listOfDictVacs = jsonResponse.get('items') #получаем значение из словаря по ключу items
-            for i in listOfDictVacs:
-                if i != None:
-                    if i.get('salary') != None:
+            json_response = response.json() # json файл из ответа = словарь
+            list_of_dict_vacs = json_response.get('items') #получаем значение из словаря по ключу items
+            for one_vac in list_of_dict_vacs:
+                if one_vac != None:
+                    if one_vac.get('salary') != None:
                         self.__vacancies.append(Vacancy(
-                            name=i.get('name'),
-                            link=i.get('area').get('url'),
-                            cur=i.get('salary', {}).get('currency') or 0,
-                            salary=i.get('salary', {}).get('from') or 0,
-                            description=i.get('snippet', {}).get('requirement')
+                            name=one_vac.get('name'),
+                            link=one_vac.get('area').get('url'),
+                            cur=one_vac.get('salary', {}).get('currency') or 0,
+                            salary=one_vac.get('salary', {}).get('from') or 0,
+                            description=one_vac.get('snippet', {}).get('requirement')
                         ))
             self.__params['page'] += 1
-
 
     def get_top_vacancies_by_salary(self, count, listt):
         """
@@ -72,14 +71,13 @@ class HH(Parser):
         на вход подать кол-во выводимых вакансий и готовый список экз класса Vacancy
 
         """
-        a = []
+        array = []
         sorted_vacancies = sorted(listt, key=lambda vacancy: vacancy.salary,
                                   reverse=True)  # Сортируем по убыванию зарплаты
         for i in sorted_vacancies:
             if i.cur == 'RUR':
-                a.append(i)
-        return a[:count]
-
+                array.append(i)
+        return array[:count]
 
     def get_vacancies_with_keyword_in_description(self, keyword):
         """

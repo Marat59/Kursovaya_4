@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class JSONSaver(ABC):
     """
     Класс сохраняющий вакансии в файл, загружающий вакансии из файла, удаляющий вакансию в файле

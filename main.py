@@ -1,8 +1,8 @@
 from src.helper import search
 from src.helper import search_by_criteria
 
-f = 0
-while f != 10:
+flag = 0
+while flag != 10:
     try:
         a = input('Введите 1 для поиска по названию, 2 для поиска по описанию (По умолчанию 1): ')
         if not (a in ['', '1', '2', '3']):
@@ -14,5 +14,5 @@ while f != 10:
             search_by_criteria()
             print()
     except:
-        f += 1
+        flag += 1
         print('Введен некорректный номер \n')

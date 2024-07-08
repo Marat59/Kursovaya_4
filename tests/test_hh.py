@@ -1,11 +1,6 @@
-import pytest
-from src.hh import HH
-from test_vacancy import vac
+from conftest import vacHH, vac
 
-@pytest.fixture()
-def vacHH():
-    nameHH = HH(None)
-    return nameHH
+
 
 def test_init_vac(vacHH):
     assert vacHH.get_url() == 'https://api.hh.ru/vacancies'

@@ -3,10 +3,12 @@ from src.jsonsaver import JSONSaver
 from src.vacancy import Vacancy
 from pathlib import Path
 
+
 class HHsaver(JSONSaver):
     """
     Класс для работы с вакансиями
     """
+
     def __init__(self):
         """
         Инициализация пустого листа для работы со словарями
@@ -35,7 +37,6 @@ class HHsaver(JSONSaver):
                 'cur': change.cur}
         )
 
-
     def vacancy_add(self, give_me_list): #на вход лист вакансий, или одну вакансию.
         """
         Добавление вакансии из файла JSON
@@ -47,7 +48,6 @@ class HHsaver(JSONSaver):
             self.get_list = give_me_list # сразу его и добавляем
         with open(Path(__file__).parent.parent.joinpath('data').joinpath('vacancies.json'), 'w', encoding='utf-8') as file:
             json.dump(self.get_list, file, ensure_ascii=False, indent = 12)
-
 
     def vacancy_del(self, vac_name):
         """
@@ -61,15 +61,14 @@ class HHsaver(JSONSaver):
         with open(Path(__file__).parent.parent.joinpath('data').joinpath('vacancies.json'), 'w', encoding='utf-8') as file2:
             json.dump(pythonvacs, file2, ensure_ascii=False, indent = 12)
 
-
     def vacancy_load(self):
         """
         Загрузка вакансий из файла JSON
         """
         with open(Path(__file__).parent.parent.joinpath('data').joinpath('vacancies.json'), 'r', encoding='utf-8') as file1:
             pythonvacs = json.load(file1)
-            ourList = []
+            our_list = []
             for py in pythonvacs:
                 obj = Vacancy(**py)
-                ourList.append(obj)
-            return ourList
+                our_list.append(obj)
+            return our_list
